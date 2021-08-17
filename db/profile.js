@@ -33,6 +33,10 @@ let profile_schema = new Schema({
     type:String,
 
   },
+  date:{
+    type:Date,
+    default:Date.now
+  }
 })
 
 let Profile = mongoose.model('Profile',profile_schema)

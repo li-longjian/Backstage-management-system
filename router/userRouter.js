@@ -13,17 +13,14 @@ router.get('/',(req,res)=>{
   res.send({'msg':'ok',code:200})
 })
 //带参数不行？？？无法跨域？？？
-router.post('/abc',(req,res)=>{
-  // header('Access-Control-Allow-Origin:*');//允许所有来源访问
-  // header('Access-Control-Allow-Method:POST,GET');//允许访问的方式
-  res.send({'msg':'ok_abc_post',code:200})
-})
+// router.post('/abc',(req,res)=>{
+//   // header('Access-Control-Allow-Origin:*');//允许所有来源访问
+//   // header('Access-Control-Allow-Method:POST,GET');//允许访问的方式
+//   res.send({'msg':'ok_abc_post',code:200})
+// })
 
 router.post('/register',(req, res)=>{
-  // console.log(req.body);
-  // res.send()
-  res.header("Access-Control-Allow-Origin","*")
-  res.header("Access-Control-Allow-Methods","get,post")
+
   const {name,email,password,identity} = req.body
   User.findOne({email:email})
       .then(user =>{
@@ -58,7 +55,7 @@ router.post('/register',(req, res)=>{
 })
 
 router.post('/login',(req, res)=>{
-  res.header("Access-Control-Allow-Origin","*")
+
   const {email,password} = req.body
   //查找是否存在当前用户
   User.findOne({email}).then(user =>{
@@ -74,9 +71,11 @@ router.post('/login',(req, res)=>{
     //  验证成功
     //  生成一个token并返回
       const rule = {
+        name:user.name,
         email:user.email,
         id:user.id,
-        identity:user.identity
+        identity:user.identity,
+        avatar: user.avatar
       }
       jwt.sign(rule, privateKey.key, {expiresIn:"7d"}, function(err, token) {
         if(err) throw err

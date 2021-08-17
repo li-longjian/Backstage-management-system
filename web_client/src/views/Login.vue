@@ -1,0 +1,146 @@
+<template>
+  <div class="Login">
+    <section class="from_container">
+      <div class="manager_title">
+        <span>在线后台管理系统</span>
+      </div>
+      <el-form :model="LoginUser" status-icon :rules="rules" ref="loginForm" label-width="80px" class="LoginForm">
+
+        <el-form-item label="邮箱" prop="email" class="el-form-item">
+          <el-input type="email" v-model="LoginUser.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password" class="el-form-item">
+          <el-input type="password" v-model="LoginUser.password" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item class="el-form-item">
+          <el-button type="primary" class="submit_btn"  @click="submitForm('loginForm')">注册</el-button>
+
+        </el-form-item>
+
+        <div class="toRegister">还没有账号？ <router-link to="/register">立即注册</router-link></div>
+
+      </el-form>
+    </section>
+  </div>
+</template>
+
+<script>
+  import jwt_decode from "jwt-decode"
+  import isEmpty from "../utils/isEmpty";
+  export default {
+    name: "Login",
+    data(){
+
+      return {
+        LoginUser:{
+
+          email:'',
+          password:'',
+
+        },
+        rules:{
+
+          email:[{type:'email',required:true,message:'邮箱格式不正确',trigger:'blur'}],
+          password: [
+            {required:true,message:'密码不能为空',trigger:'blur'},
+            {min:6,max:20,message: '长度在 6 到 20 个字符',trigger: 'blur'}
+          ],
+
+
+        }
+      }
+    },
+    methods:{
+      submitForm(formName){
+        this.$refs[formName].validate( (valid) =>{
+          if(valid){
+            this.$axios.post('/login',this.LoginUser)
+                .then(res => {
+                  //将token存储在缓存
+                  localStorage.setItem('eleToken',res.data.token)
+                  //将token解析成用户信息
+                  const decoded = jwt_decode(res.data.token)
+                  // console.log("decode:",decoded);
+                  //检查解码后的token是否为空,为空，授权状态为false,不为空，则授权为true
+                  const isAuthentication   = !isEmpty(decoded)
+                  //更改store中的授权状态
+                  this.$store.commit('setAuthentication',isAuthentication)
+
+                  this.$store.commit('setUser',decoded)
+                  this.$router.push('/index')
+                }).catch(error =>{
+
+
+              console.log(error);
+              this.$message({
+                  message: '密码或账号错误',
+                  type: 'error'
+                })
+
+            })
+
+          }
+        })
+
+      }
+    }
+
+  }
+</script>
+
+<style scoped>
+  *{
+    margin:0;
+    padding:0;
+
+  }
+  .Login{
+    position: relative;
+    width:100%;
+    height:800px;
+    /*height:100%;*/
+    background: url('../assets/img/bg.jpg') no-repeat ;
+    background-size: 100% 100%;
+
+  }
+  .from_container{
+    position: relative;
+    top:50px;
+    left:35%;
+    width:450px;
+    height:550px;
+
+  }
+  .manager_title{
+    width:100%;
+    height:40px;
+
+    line-height: 40px;
+    text-align: center;
+    color:#ffffff;
+    font-size:24px;
+    letter-spacing: 3px;
+  }
+  .LoginForm {
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 20px 40px 20px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px #cccc;
+  }
+  .el-form-item{
+    margin-bottom: 20px;
+  }
+
+  .toRegister{
+    margin:20px;
+    position: absolute;
+    right:20px;
+    top:230px;
+  }
+  .submit_btn {
+    width: 100%;
+    height:40px;
+  }
+</style>

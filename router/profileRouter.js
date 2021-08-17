@@ -12,7 +12,7 @@ const passport = require('passport')
  * 增加一条货物记录
  */
 router.post('/profile/add',passport.authenticate("jwt",{session:false}),(req,res)=>{
-  res.header("Access-Control-Allow-Origin","*")
+
   let profileData = {}
   if(req.body.type) profileData.type = req.body.type
   if(req.body.describe) profileData.describe = req.body.describe
@@ -20,6 +20,8 @@ router.post('/profile/add',passport.authenticate("jwt",{session:false}),(req,res
   if(req.body.expend) profileData.expend = req.body.expend
   if(req.body.cash) profileData.cash = req.body.cash
   if(req.body.remark) profileData.remark = req.body.remark
+  if(req.body.date) profileData.date = req.body.date
+
 
   new Profile(profileData).save().then(profile => {
     res.json(profile)
@@ -30,7 +32,7 @@ router.post('/profile/add',passport.authenticate("jwt",{session:false}),(req,res
  * 展示表所有的记录
  */
 router.get('/profile',passport.authenticate("jwt",{session:false}),(req,res)=>{
-  res.header("Access-Control-Allow-Origin","*")
+
   Profile.find().then(profile => {
     if(!profile){
       return res.status(400).json({msg:'没有任何记录'})
@@ -46,7 +48,7 @@ router.get('/profile',passport.authenticate("jwt",{session:false}),(req,res)=>{
  */
 
 router.get('/profile:id',passport.authenticate("jwt",{session:false}),(req,res)=>{
-  res.header("Access-Control-Allow-Origin","*")
+
   Profile.findOne({_id:req.params.id}).then(profile =>{
     if(!profile){
       return res.status(404).json({msg:'没有该条记录'})
@@ -59,7 +61,7 @@ router.get('/profile:id',passport.authenticate("jwt",{session:false}),(req,res)=
  * 根据id编辑记录
  */
 router.post('/edit/:id',passport.authenticate("jwt",{session:false}),(req,res)=>{
-  res.header("Access-Control-Allow-Origin","*")
+
   let profileData = {}
   if(req.body.type) profileData.type = req.body.type
   if(req.body.describe) profileData.describe = req.body.describe

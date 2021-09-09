@@ -9,6 +9,11 @@ const Home = () => import('../views/Home')
 const infoShow = ()  => import ("../views/infoShow");
 const NotFound = () => import('../views/404')
 const FoundList = () => import('../views/FoundList')
+const Borad = () => import('../views/Board/Borad')
+const Trander = () => import('../views/tenderAndBids/Trander')
+const Bids = () => import('../views/tenderAndBids/Bids')
+
+
 
 Vue.use(VueRouter)
 
@@ -34,6 +39,15 @@ const routes = [
       },
       {
         path:'/foundList',name: 'FoundList',component:FoundList
+      },
+      {
+        path:'/board',name: 'board',component:Borad
+      },
+      {
+        path:'/tender',name: 'Trander',component:Trander
+      },
+      {
+        path: '/bids',name:'Bids',component:Bids
       }
     ]
   },

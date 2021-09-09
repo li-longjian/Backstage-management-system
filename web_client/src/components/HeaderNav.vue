@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="6" class="logo-container">
           <img src="../assets/img/logo.png" class="logo">
-          <span class="title">在线后台管理系统</span>
+          <span class="title">药品在线招投标系统</span>
         </el-col>
 
         <el-col :span="6" class="user">
@@ -95,8 +95,8 @@
   .title {
     vertical-align: middle;
     font-size: 22px;
-
-    letter-spacing: 3px;
+    padding-left: 10px;
+    letter-spacing: 5px;
   }
   .userInfo{
     height:60px;

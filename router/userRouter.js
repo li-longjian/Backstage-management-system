@@ -12,7 +12,7 @@ router.get('/',(req,res)=>{
   res.header("Access-Control-Allow-Origin","*")
   res.send({'msg':'ok',code:200})
 })
-//带参数不行？？？无法跨域？？？
+//
 // router.post('/abc',(req,res)=>{
 //   // header('Access-Control-Allow-Origin:*');//允许所有来源访问
 //   // header('Access-Control-Allow-Method:POST,GET');//允许访问的方式

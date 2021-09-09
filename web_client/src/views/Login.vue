@@ -2,7 +2,7 @@
   <div class="Login">
     <section class="from_container">
       <div class="manager_title">
-        <span>在线后台管理系统</span>
+        <span>药品在线招投标系统</span>
       </div>
       <el-form :model="LoginUser" status-icon :rules="rules" ref="loginForm" label-width="80px" class="LoginForm">
 
@@ -14,7 +14,7 @@
         </el-form-item>
 
         <el-form-item class="el-form-item">
-          <el-button type="primary" class="submit_btn"  @click="submitForm('loginForm')">注册</el-button>
+          <el-button type="primary" class="submit_btn"  @click="submitForm('loginForm')">登录</el-button>
 
         </el-form-item>
 

@@ -1,8 +1,13 @@
 const express= require('express')
 
 const app = express()
+
 const userRouter = require('./router/userRouter')
 const profileRouter = require('./router/profileRouter')
+const messageRouter = require('./router/messageRouter')
+const tenderRouter = require('./router/tenderRouter')
+const bidsRouter = require('./router/bidsRouter')
+
 const bodyParser = require('body-parser')
 
 const cors = require('cors')
@@ -22,6 +27,11 @@ require('./config/passport')(passport)
 
 app.use(userRouter)
 app.use(profileRouter)
+app.use(messageRouter)
+app.use(tenderRouter)
+app.use(bidsRouter)
+
+
 app.listen(3000,()=>{
   console.log('http://localhost:3000/');
 })

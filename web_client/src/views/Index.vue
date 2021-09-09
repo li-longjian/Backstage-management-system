@@ -1,4 +1,5 @@
 <template>
+<!--  首页-->
   <div class="IndexBox">
     <header-nav ></header-nav>
     <left-menu-nav></left-menu-nav>
@@ -13,6 +14,7 @@
 </template>
 
 <script>
+  
   import HeaderNav from "../components/HeaderNav";
   import LeftMenuNav from "../components/LeftMenuNav";
   export default {

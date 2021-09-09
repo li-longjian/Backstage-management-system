@@ -20,8 +20,9 @@
 
         <el-form-item label="选择身份"  class="el-form-item">
           <el-select v-model="registerUser.identity" prop="identity" placeholder="请选择身份">
-            <el-option label="管理员" value="管理员" class="option"></el-option>
-            <el-option label="员工" value="普通员工" class="option"></el-option>
+            <el-option label="系统管理员" value="系统管理员" class="option"></el-option>
+            <el-option label="药品招标单位" value="药品招标单位" class="option"></el-option>
+            <el-option label="药品投标单位" value="药品投标单位" class="option"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="el-form-item">
@@ -55,7 +56,7 @@
         rules:{
           name: [
             { required: true, message: '用户名不能为空', trigger: 'blur' },
-            { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+            { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
           ],
           email:[{type:'email',required:true,message:'邮箱格式不正确',trigger:'blur'}],
           password: [

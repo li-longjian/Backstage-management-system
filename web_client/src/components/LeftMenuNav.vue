@@ -16,8 +16,15 @@
             </el-menu-item>
           </router-link>
 
-
-            <el-submenu v-if="item.children"  v-for="item in items" :index="item.path" :key="item.name">
+<!--          留言板 message board-->
+          <router-link to="/board">
+            <el-menu-item index="1">
+              <i class="el-icon-s-comment"></i>
+              <span slot="title">留言板</span>
+            </el-menu-item>
+          </router-link>
+<!--            //v-if="item.children"   -->
+            <el-submenu v-if=" user.identity  === '系统管理员' "  v-for="item in items" :index="item.path" :key="item.name">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>{{item.name}}</span>
@@ -29,6 +36,22 @@
               </router-link>
             </el-submenu>
 
+
+<!--          投标页面-->
+          <router-link to="/tender" v-if="user.identity === '药品投标单位' ">
+            <el-menu-item index="3">
+              <i class="el-icon-s-order"></i>
+              <span slot="title">进行投标</span>
+            </el-menu-item>
+          </router-link>
+
+<!--          招标页面;-->
+          <router-link to="/bids" v-if="user.identity === '药品招标单位' ">
+            <el-menu-item index="3">
+              <i class="el-icon-s-order"></i>
+              <span slot="title">进行招标</span>
+            </el-menu-item>
+          </router-link>
 
         </el-menu>
       </el-col>
@@ -42,13 +65,15 @@
     name: "LeftMenuNav",
     data(){
       return {
+        //获取用户
+        user:this.$store.state.user,
         //处理具有多个子集的目录
         items:[
           {
             path:'fund',
-            name:'资金管理',
+            name:'留言板管理',
             children:[
-              {path: 'foundList',name:'资金流水'},
+              {path: 'foundList',name:'留言板维护'},
               {path:'child_1',name:'子集一'},
               {path:'child_2',name:'子集二'}
 

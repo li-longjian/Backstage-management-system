@@ -30,6 +30,9 @@ let tender_schema = new Schema({
   bail:{//投标保证金
     type:String
   },
+  announcer:{//信息发布者
+    type:String
+  },
   date:{
     type:Date,
     default:Date.now

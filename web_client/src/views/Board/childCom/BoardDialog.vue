@@ -23,11 +23,15 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="公司名称:" prop="name">
+          <el-form-item label="注册公司名称:" prop="name">
             <el-input type="textarea" v-model="form_data.companyName"></el-input>
           </el-form-item>
-          <el-form-item prop='describe' label="招、投标:">
-            <el-input type="describe" v-model="form_data.describe"></el-input>
+          <el-form-item v-if="form_data.identity!==' 系统管理员' " prop='describe' label="招、投标:">
+            <!--<el-input type="describe" v-model="form_data.describe"></el-input>-->
+            <template>
+              <el-radio v-model="form_data.describe" label="招标">招标</el-radio>
+              <el-radio v-model="form_data.describe" label="投标">投标</el-radio>
+            </template>
           </el-form-item>
 
 
@@ -57,7 +61,7 @@
     },
     data() {
       return {
-
+        user:this.$store.state.user,
         format_type_list: [
           "国有独资公司",
           "个人独资企业",
@@ -84,7 +88,7 @@
           if (valid) {
 
             const option = this.dialog.option
-
+            this.form_data.announcer = this.user.id;
             if(option === 'add'){
 
               this.$axios.post('/board/add',this.form_data).then(res =>{
@@ -104,7 +108,7 @@
             }
             else if(option === 'edit'){
 
-              this.$axios.post(`/edit/${this.form_data.id}`,this.form_data).then(res =>{
+              this.$axios.post(`/message/edit/${this.form_data.id}`,this.form_data).then(res =>{
                 this.$message({
                   message:'修改成功',
                   type: 'success',

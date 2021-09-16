@@ -20,7 +20,7 @@
 
         <el-form-item label="选择身份"  class="el-form-item">
           <el-select v-model="registerUser.identity" prop="identity" placeholder="请选择身份">
-            <el-option label="系统管理员" value="系统管理员" class="option"></el-option>
+           <!-- <el-option label="系统管理员" value="系统管理员" class="option"></el-option>-->
             <el-option label="药品招标单位" value="药品招标单位" class="option"></el-option>
             <el-option label="药品投标单位" value="药品投标单位" class="option"></el-option>
           </el-select>

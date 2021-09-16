@@ -1,7 +1,7 @@
 <template>
   <div class="Home">
     <div class="content">
-      <p >在线后台管理系统主页面</p>
+      <p >欢迎访问药品在线投招标系统</p>
     </div>
   </div>
 </template>
@@ -13,10 +13,10 @@
 </script>
 
 <style scoped>
-.Home{ background: url("../assets/img/showcase.png") no-repeat  ;
-  width:100%;
-  height:100%;
-
+.Home{
+  background: url("../assets/img/showcase.png") no-repeat  ;
+  width: 90%;
+  height:92%;
   background-size: cover;
 
 }

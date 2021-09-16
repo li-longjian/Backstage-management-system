@@ -12,6 +12,9 @@ const mutations = {
   setAuthentication(state,Authentication ){
     state.isAuthentication = Authentication
   },
+  setAdmin(state,isAdmin){
+    state.user.isAdmin = isAdmin;
+  },
   setUser(state,user){
     if(user){
       state.user = user

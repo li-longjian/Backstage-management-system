@@ -12,6 +12,11 @@ const FoundList = () => import('../views/FoundList')
 const Borad = () => import('../views/Board/Borad')
 const Trander = () => import('../views/tenderAndBids/Trander')
 const Bids = () => import('../views/tenderAndBids/Bids')
+const SetAdmin = () => import('../views/setting/SetAdmin')
+const MyBids = () => import('../views/tenderAndBids/MyBids')
+const News = () => import('../views/News')
+const MyTender = ()=> import('../views/tenderAndBids/MyTander')
+const MyMessage = () => import('../views/MyMessage')
 
 
 
@@ -48,7 +53,23 @@ const routes = [
       },
       {
         path: '/bids',name:'Bids',component:Bids
-      }
+      },
+      {
+        path:'/mybids',name: 'MyBids',component:MyBids
+      },
+      {
+        path:'/setadmin',name: 'SetAdmin',component:SetAdmin
+      },
+      {
+        path:'/news',name: 'News',component:News
+      },
+      {
+        path: '/mytander',name: 'MyTender',component:MyTender
+      },
+      {
+        path:'/mymessage',name: 'MyMessage',component:MyMessage
+      },
+
     ]
   },
   {
@@ -81,6 +102,7 @@ const router = new VueRouter({
  * 当跳转的是其他页面，则必须登录，此时需要检查是否登录状态（在登录状态时本地缓存有token,
  * 如果有，则正常跳转页面，否则跳转到登录页面
  */
+
 router.beforeEach((to,from,next) =>{
   if(to.path === '/login' || to.path === '/register' ){
     next()
@@ -100,7 +122,15 @@ router.beforeEach((to,from,next) =>{
   }
 
 })
+/**
+ *
+ *
+ */
+/*router.beforeEach((to,from,next) =>{
+  if(to.path === "/index"){
 
+  }
+})*/
 
 
 export default router

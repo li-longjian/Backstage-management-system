@@ -33,6 +33,10 @@ let user_schema = new Schema({
     type:Date,
     default : Date.now
   },
+  isAdmin:{
+    type:Boolean,
+    default:false
+  }
 })
 
 let User = mongoose.model('User',user_schema)

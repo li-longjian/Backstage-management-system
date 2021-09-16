@@ -1,6 +1,7 @@
 <template>
   <div id="Board">
-    <h2>我的招标信息</h2>
+    <h2 v-if="user.identity === '系统管理员'">管理投标信息</h2>
+    <h2 v-else>我的投标信息</h2>
     <div class="form">
       <el-form class="filter" :model="filterData">
         <el-date-picker
@@ -20,11 +21,6 @@
         <el-button type="primary" class="filter_btn" size="small" @click="reSetFilter">重置</el-button>
       </el-form>
 
-      <el-form :inline="true" class="demo-form-inline">
-        <el-form-item>
-          <el-button type="primary" class="add_btn" size="small" @click="onAddMessage">发布招标信息</el-button>
-        </el-form-item>
-      </el-form>
     </div>
     <div>
       <template>
@@ -53,19 +49,19 @@
             </template>
           </el-table-column>
           <el-table-column
-                  prop="name"
-                  label="公司名称"
-                  width="130"
+                  prop="bidsTime"
+                  label="投标日期"
+                  width="230"
                   align="center">
             <template slot-scope="scope">
 
-              <span style="margin-left: 10px">{{ scope.row.companyName }}</span>
+              <span style="margin-left: 10px">{{ scope.row.bidsTime }}</span>
             </template>
           </el-table-column>
           <el-table-column
                   prop="number"
                   label="招标项目编号"
-                  width="120"
+                  width="100"
                   align="center">
 
             <template slot-scope="scope">
@@ -76,20 +72,20 @@
 
 
           <el-table-column
-                  prop="drugName"
-                  label="药品名称"
-                  width="150"
+                  prop="LegalName"
+                  label="法人姓名"
+                  width="100"
                   align="center">
             <template slot-scope="scope">
 
-              <span style="margin-left: 10px">{{ scope.row.drugName }}</span>
+              <span style="margin-left: 10px">{{ scope.row.LegalName }}</span>
             </template>
           </el-table-column>
 
           <el-table-column
                   prop="companyName"
-                  label="制药单位"
-                  width="155"
+                  label="投标单位"
+                  width="130"
                   align="center">
             <template slot-scope="scope">
 
@@ -98,71 +94,98 @@
           </el-table-column>
 
           <el-table-column
-                  prop="Package"
-                  label="包装要求"
-                  width="225"
+                  prop="phone"
+                  label="联系电话"
+                  width="130"
                   align="center">
             <template slot-scope="scope">
 
-              <span style="margin-left: 10px">{{ scope.row.Package }}</span>
+              <span style="margin-left: 10px">{{ scope.row.phone }}</span>
             </template>
           </el-table-column>
 
           <el-table-column
-                  prop="Total"
-                  label="总量"
-                  width="200"
+                  prop="productNumber"
+                  label="产品批号"
+                  width="130"
                   align="center">
             <template slot-scope="scope">
 
-              <span style="margin-left: 10px">{{ scope.row.Total }}</span>
+              <span style="margin-left: 10px">{{ scope.row.productNumber }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="expirationDate"
-                  label="截止日期"
-                  width="200"
+                  prop="productionDate"
+                  label="生产日期"
+                  width="130"
                   align="center">
             <template slot-scope="scope">
 
-              <span style="margin-left: 10px">{{ scope.row.expirationDate }}</span>
+              <span style="margin-left: 10px">{{ scope.row.productionDate }}</span>
             </template>
           </el-table-column>
           <el-table-column
-                  prop="bail"
-                  label="保证金"
-                  width="200"
+                  prop="bailTotal"
+                  label="投标总金额"
+                  width="130"
                   align="center">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{ scope.row.bail }}</span>
+
+              <span style="margin-left: 10px">{{ scope.row.bailTotal }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作1" align="center" width="100">
+
+          <el-table-column
+                  prop="validPeriod"
+                  label="有效期"
+                  width="130"
+                  align="center">
+            <template slot-scope="scope">
+
+              <span style="margin-left: 10px">{{ scope.row.validPeriod }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+                  prop="paymentDate"
+                  label="投标保证金缴款日期"
+                  width="130"
+                  align="center">
+            <template slot-scope="scope">
+
+              <span style="margin-left: 10px">{{ scope.row.paymentDate }}</span>
+            </template>
+          </el-table-column>
+         <!-- <el-table-column
+                  prop="announcer"
+                  label="发布者"
+                  width="130"
+                  align="center">
+            <template slot-scope="scope">
+
+              <span style="margin-left: 10px">{{ scope.row.announcer }}</span>
+            </template>
+          </el-table-column>-->
+          <el-table-column label="操作1" align="center" width="100" v-if="user.identity === '系统管理员' ">
             <template slot-scope="scope">
               <el-button
                       type="warning"
 
                       @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-
-             <!-- <el-button
-                      size="mini"
-                      type="danger"
-                      @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->
             </template>
-
           </el-table-column>
-          <el-table-column label="操作2" align="center" width="100">
-          <template slot-scope="scope">
-            <el-popconfirm
-                    title="确定删除吗？"
-                    icon="el-icon-info"
-                    @confirm="handleDelete(scope.$index, scope.row)"
-
-            >
-              <el-button slot="reference" >删除</el-button>
-            </el-popconfirm>
-          </template>
+          <el-table-column label="操作2" align="center" width="100" v-if="user.identity === '系统管理员' ">
+            <template slot-scope="scope">
+              <el-popconfirm
+                      title="确定删除吗？"
+                      icon="el-icon-info"
+                      @confirm="handleDelete(scope.$index, scope.row)"
+              >
+                <el-button slot="reference" >删除</el-button>
+              </el-popconfirm>
+            </template>
           </el-table-column>
+
         </el-table>
         <!--        分页-->
         <el-row>
@@ -183,22 +206,24 @@
         </el-row>
       </template>
     </div>
-<tander-dialog :form_data="form_data" :dialog="dialog" @LoadRefresh="LoadRefresh"></tander-dialog>
+    <bid-dialog :form_data="form_data" :dialog="dialog"></bid-dialog>
   </div>
 
 </template>
 
 <script>
 
-import TanderDialog from "./childCom/TanderDialog";
 
 
+  import BidDialog from "./childCom/BidaDialog";
   export default {
-    name: "Bids",
-    components: {TanderDialog},
+    name: "MyBids",
+    components: {BidDialog},
     data() {
+
       return {
         user:this.$store.state.user,
+
         filterData: {
           startTime: '',
           endTime: ''
@@ -207,23 +232,17 @@ import TanderDialog from "./childCom/TanderDialog";
         tableData: [],//一页的数据
         allTableData: [],//全部页一共有的数据
         form_data: {
-          number: '',
-          drugName: '',
-          companyName: '',
-          Package:'',
-          Total:'',
-          expirationDate:'',
-          bail:'',
-          announcer:''
-
-        },
-
-        pagination: {
-          current_page: 1,//当前的页数
-          total: 0,//总共多少页
-          page_size: 5,//默认每页显示多少条
-          page_sizes: [5, 10, 15, 20],//选择每页显示多少条
-          layout: "total, sizes, prev, pager, next, jumper"//组件布局
+          bidsTime: '',
+          LegalName: '',
+          phone: '',
+          number:'',
+          productNumber:'',
+          companyName:'',
+          bailTotal:'',
+          productionDate:'',
+          validPeriod:'',
+          paymentDate:'',
+          id:''
         },
         //增加留言信息
         dialog:{
@@ -232,20 +251,37 @@ import TanderDialog from "./childCom/TanderDialog";
           option:''//操作
 
         },
+        pagination: {
+          current_page: 1,//当前的页数
+          total: 0,//总共多少页
+          page_size: 5,//默认每页显示多少条
+          page_sizes: [5, 10, 15, 20],//选择每页显示多少条
+          layout: "total, sizes, prev, pager, next, jumper"//组件布局
+        },
+
       }
     },
     created() {
-      this.getMessages();
+
+        this.getMyBids();
+
 
     },
     methods:{
-      getMessages(){
-        this.$axios.get("/tender").then(res =>{
+      getMyBids(){
+        if(this.user.identity === '系统管理员'){
+          this.$axios.get('/bids').then(res =>{
+            this.allTableData = res.data
+            this.setPagination()
+          })
+        }else {
+          this.$axios.get(`/bids/${this.user.id}`).then(res =>{
 
-          this.allTableData = res.data
-         /* console.log(this.allTableData)*/
-          this.setPagination()
-        })
+            this.allTableData = res.data
+            this.setPagination()
+          })
+        }
+
 
       },
       setPagination(){
@@ -262,7 +298,7 @@ import TanderDialog from "./childCom/TanderDialog";
       },
       LoadRefresh(){
         //再次调用，刷新页面
-        this.getMessages()
+        this.getMyBids()
       },
       handleSizeChange(page_size){
         this.pagination.page_size = page_size
@@ -296,7 +332,7 @@ import TanderDialog from "./childCom/TanderDialog";
             message:'请选择筛选时间段',
             type:'warning'
           })
-          this.getProfiles()
+          this.getMyBids()
           return
         }
 
@@ -316,49 +352,34 @@ import TanderDialog from "./childCom/TanderDialog";
       },
       reSetFilter(){
         //重新获取数据
-        this.getMessages()
+        this.getMyBids()
         //清除筛选框内容
         this.filterData = {}
         //重新设置分页设置
         this.setPagination()
       },
 
-      onAddMessage(){
-        this.form_data = {}
+      handleEdit(index,row){
+
+        this.form_data = row
+        //注意form_data的是id row中的是 _id
+        this.form_data.id = row._id
         this.dialog.isShow = true
-        this.dialog.title = "发布招标信息"
-        this.dialog.option ="add"
-      },
-      //编辑：
-      handleEdit(index, row){
-        this.form_data.number = row.number
-        this.form_data.drugName = row.drugName
-        this.form_data.companyName = row.companyName
-        this.form_data.id = row._id;
-        this.form_data.Package = row.Package
-        this.form_data.Total = row.Total
-        this.form_data.expirationDate = row.expirationDate
-        this.form_data.bail = row.bail
-
-
-
-        this.dialog.isShow = true
-        this.dialog.title = '编辑招标信息'
+        this.dialog.title = '编辑投标信息'
         this.dialog.option = 'edit'
       },
-      //删除一条信息
-      handleDelete(index, row) {
-        this.$axios.get(`/tender/delete/${row._id}`).then(res =>{
+
+      handleDelete(index,row){
+        this.$axios.get(`/bids/delete/${row._id}`).then(res =>{
           this.$message({
             message:'删除成功',
             type: 'success',
             center: true
           })
-          //重新刷新
-          this.getMessages()
+          this.getMyBids();
         })
-      },
 
+      }
 
     }
 

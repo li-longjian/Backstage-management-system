@@ -1,3 +1,6 @@
+
+<!--投标信息弹窗-->
+
 <template>
   <div class="logFund">
     <el-dialog
@@ -81,6 +84,7 @@
     data() {
       return {
 
+        user:this.$store.state.user,//获取当前账户登录信息
 
         form_rules: {
           LegalName: [
@@ -114,6 +118,7 @@
           if (valid) {
 
             const option = this.dialog.option
+            this.form_data.announcer = this.user.id;
 
             if(option === 'add'){
 
@@ -134,7 +139,8 @@
             }
             else if(option === 'edit'){
 
-              this.$axios.post(`/edit/${this.form_data.id}`,this.form_data).then(res =>{
+
+              this.$axios.post(`/bids/edit/${this.form_data.id}`,this.form_data).then(res =>{
                 this.$message({
                   message:'修改成功',
                   type: 'success',

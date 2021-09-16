@@ -1,6 +1,7 @@
 <template>
   <div id="Board">
-    <h2>留言板</h2>
+    <h2 v-if="userIdentity === '系统管理员'">管理留言板信息</h2>
+    <h2 v-else class="title">留言板</h2>
     <div class="form">
       <el-form class="filter" :model="filterData">
         <el-date-picker
@@ -30,7 +31,8 @@
       <template>
         <el-table
                 :data="tableData"
-                style="width: 85%"
+
+                style="width:100%"
                 max-height="450"
                 border
         >
@@ -96,6 +98,35 @@
             </template>
           </el-table-column>
 
+
+          <el-table-column v-if="userIdentity==='系统管理员' " label="操作1" align="center" width="100">
+            <template slot-scope="scope">
+              <el-button
+                      type="warning"
+
+                      @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            </template>
+
+          </el-table-column>
+          <el-table-column v-if="userIdentity==='系统管理员'" label="操作2" align="center" width="100">
+            <template slot-scope="scope">
+              <el-popconfirm
+                      title="确定删除吗？"
+                      icon="el-icon-info"
+                      @confirm="handleDelete(scope.$index, scope.row)"
+              >
+                <el-button slot="reference" >删除</el-button>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+
+
+
+
+
+
+
+
         </el-table>
         <!--        分页-->
         <el-row>
@@ -126,10 +157,12 @@
   import BoardDialog from "./childCom/BoardDialog";
 
   export default {
+
     name: "Borad",
     components: {BoardDialog},
     data() {
       return {
+        userIdentity:this.$store.state.user.identity,
         filterData: {
           startTime: '',
           endTime: ''
@@ -141,7 +174,8 @@
           type: '',
           describe: '',
           remark: '',
-          companyName:''
+          companyName:'',
+          identity:''
         },
 
         pagination: {
@@ -151,7 +185,7 @@
           page_sizes: [5, 10, 15, 20],//选择每页显示多少条
           layout: "total, sizes, prev, pager, next, jumper"//组件布局
         },
-        //增加留言信息
+        //弹窗信息
         dialog:{
           isShow:false,//默认编辑框隐藏
           title:'',//操作标题
@@ -167,9 +201,7 @@
     methods:{
       getMessages(){
         this.$axios.get("/board").then(res =>{
-
           this.allTableData = res.data
-          console.log(this.allTableData)
           this.setPagination()
         })
 
@@ -248,12 +280,45 @@
         //重新设置分页设置
         this.setPagination()
       },
-
       onAddMessage(){
         this.form_data = {}
         this.dialog.isShow = true
         this.dialog.title = "发布留言信息"
         this.dialog.option ="add"
+      },
+      //删除留言信息
+      handleDelete(index,row){
+
+        this.$axios.get(`/message/delete/${row._id}`).then(res =>{
+          this.$message({
+            message:'删除成功',
+            type: 'success',
+            center: true
+          })
+          //重新刷新
+          this.getMessages()
+        }).catch(err => {
+          this.$message({
+            message:'删除失败',
+            type: 'error',
+            center: true
+          })
+        })
+
+      },
+      //编辑留言信息
+      handleEdit(index,row){
+        this.form_data.type = row.type
+        this.form_data.describe = row.describe
+        this.form_data.remark = row.remark
+        this.form_data.id = row._id;
+        this.form_data.companyName = row.companyName
+        this.form_data.announcer = row.announcer
+
+
+        this.dialog.isShow = true
+        this.dialog.title = '编辑留言信息'
+        this.dialog.option = 'edit'
       }
 
     }
@@ -263,8 +328,10 @@
 
 <style scoped>
   #Board{
-    margin:10px;
+
+
   }
+
   .filter {
     margin-top: 20px;
 

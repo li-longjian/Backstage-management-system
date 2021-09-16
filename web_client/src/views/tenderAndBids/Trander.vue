@@ -1,6 +1,7 @@
 <template>
   <div id="Board">
-    <h2>公司企业招标信息</h2>
+    <h2 v-if="user.identity === '系统管理员' ">管理企业招标信息</h2>
+    <h2 v-else>公司企业招标信息</h2>
     <div class="form">
       <el-form class="filter" :model="filterData">
         <el-date-picker
@@ -22,7 +23,7 @@
 
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item>
-          <el-button type="primary" class="add_btn" size="small" @click="onAddMessage">进行投标</el-button>
+          <el-button v-if="user.identity !== '系统管理员'" type="primary" class="add_btn" size="small" @click="onAddMessage">进行投标</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -138,7 +139,25 @@
               <span style="margin-left: 10px">{{ scope.row.bail }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="操作1" align="center" width="100" v-if="user.identity === '系统管理员' ">
+            <template slot-scope="scope">
+              <el-button
+                      type="warning"
 
+                      @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作2" align="center" width="100" v-if="user.identity === '系统管理员' ">
+            <template slot-scope="scope">
+              <el-popconfirm
+                      title="确定删除吗？"
+                      icon="el-icon-info"
+                      @confirm="handleDelete(scope.$index, scope.row)"
+              >
+                <el-button slot="reference" >删除</el-button>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
         </el-table>
         <!--        分页-->
         <el-row>
@@ -159,7 +178,10 @@
         </el-row>
       </template>
     </div>
-    <bida-dialog :dialog="dialog" :form_data="form_data" @LoadRefresh="LoadRefresh"></bida-dialog>
+    <tander-dialog v-if="user.identity === '系统管理员'"
+                   :dialog="dialog" :form_data="form_data"
+                   @LoadRefresh="LoadRefresh"></tander-dialog>
+    <bida-dialog v-else :dialog="dialog" :form_data="form_data" @LoadRefresh="LoadRefresh"></bida-dialog>
   </div>
 
 </template>
@@ -167,12 +189,14 @@
 <script>
 
 import BidaDialog from "./childCom/BidaDialog";
+import TanderDialog from "./childCom/TanderDialog";
 
   export default {
     name: "Trander",
-    components: {BidaDialog},
+    components: {TanderDialog, BidaDialog},
     data() {
       return {
+        user:this.$store.state.user,
         filterData: {
           startTime: '',
           endTime: ''
@@ -187,8 +211,9 @@ import BidaDialog from "./childCom/BidaDialog";
           Package:'',
           Total:'',
           expirationDate:'',
-          bail:''
-
+          bail:'',
+          announcer:'',
+          id:''
 
         },
 
@@ -217,7 +242,7 @@ import BidaDialog from "./childCom/BidaDialog";
         this.$axios.get("/tender").then(res =>{
 
           this.allTableData = res.data
-          console.log(this.allTableData)
+        /*  console.log(this.allTableData)*/
           this.setPagination()
         })
 
@@ -302,9 +327,34 @@ import BidaDialog from "./childCom/BidaDialog";
         this.dialog.isShow = true
         this.dialog.title = "填写投标信息"
         this.dialog.option ="add"
+      },
+
+      handleEdit(index,row){
+
+        this.form_data = row
+        this.form_data.id = row._id
+
+
+        this.dialog.isShow = true
+        this.dialog.title = '编辑招标信息'
+        this.dialog.option = 'edit'
+      },
+
+      //删除一条信息
+      handleDelete(index, row) {
+        this.$axios.get(`/tender/delete/${row._id}`).then(res =>{
+          this.$message({
+            message:'删除成功',
+            type: 'success',
+            center: true
+          })
+          //重新刷新
+          this.getMessages()
+        })
+      },
+
       }
 
-    }
 
   }
 </script>

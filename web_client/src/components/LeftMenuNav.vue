@@ -12,21 +12,31 @@
           <router-link to="/home">
             <el-menu-item index="0">
               <i class="el-icon-menu"></i>
-              <span slot="title">首页</span>
+              <span slot="title">欢迎</span>
+            </el-menu-item>
+          </router-link>
+<!--          公共服务-->
+          <router-link to="/news"   v-if=" user.identity  !== '系统管理员' ">
+            <el-menu-item index="1">
+              <i class="el-icon-s-opportunity"></i>
+              <span slot="title">公共服务</span>
             </el-menu-item>
           </router-link>
 
-<!--          留言板 message board-->
+
+
+       <!--   留言板 message board-->
           <router-link to="/board">
-            <el-menu-item index="1">
+            <el-menu-item index="3">
               <i class="el-icon-s-comment"></i>
               <span slot="title">留言板</span>
             </el-menu-item>
           </router-link>
 <!--            //v-if="item.children"   -->
+<!--          -->
             <el-submenu v-if=" user.identity  === '系统管理员' "  v-for="item in items" :index="item.path" :key="item.name">
               <template slot="title">
-                <i class="el-icon-location"></i>
+                <i class="el-icon-circle-plus-outline"></i>
                 <span>{{item.name}}</span>
               </template>
               <router-link v-for="(citem,cindex) in  item.children "
@@ -39,20 +49,48 @@
 
 <!--          投标页面-->
           <router-link to="/tender" v-if="user.identity === '药品投标单位' ">
-            <el-menu-item index="3">
+            <el-menu-item index="4">
               <i class="el-icon-s-order"></i>
               <span slot="title">进行投标</span>
             </el-menu-item>
           </router-link>
 
 <!--          招标页面;-->
-          <router-link to="/bids" v-if="user.identity === '药品招标单位' ">
-            <el-menu-item index="3">
+          <router-link to="/mytander" v-if="user.identity === '药品招标单位' ">
+            <el-menu-item index="5">
               <i class="el-icon-s-order"></i>
               <span slot="title">进行招标</span>
             </el-menu-item>
           </router-link>
+        <!--  <router-link to="/bids" v-if="user.identity === '药品招标单位' ">
+            <el-menu-item index="3">
+              <i class="el-icon-s-order"></i>
+              <span slot="title">进行招标</span>
+            </el-menu-item>
+          </router-link>-->
 
+<!--展示投标单位发布的个人投标信息-->
+
+          <router-link to="/mybids" v-if="user.identity === '药品投标单位' ">
+            <el-menu-item index="6">
+              <i class="el-icon-s-claim"></i>
+              <span slot="title">我的投标</span>
+            </el-menu-item>
+          </router-link>
+<!--         消息页-->
+          <router-link to="/mymessage" >
+            <el-menu-item index="7">
+              <i class="el-icon-message"></i>
+              <span slot="title">我的消息</span>
+            </el-menu-item>
+          </router-link>
+<!--          个人信息页-->
+          <router-link to="/infoShow" >
+            <el-menu-item index="8">
+              <i class="el-icon-s-claim"></i>
+              <span slot="title">个人信息</span>
+            </el-menu-item>
+          </router-link>
         </el-menu>
       </el-col>
     </el-row>
@@ -71,11 +109,11 @@
         items:[
           {
             path:'fund',
-            name:'留言板管理',
+            name:'管理与维护',
             children:[
-              {path: 'foundList',name:'留言板维护'},
-              {path:'child_1',name:'子集一'},
-              {path:'child_2',name:'子集二'}
+              {path: 'board',name:'留言板管理'},
+              {path:'tender',name:'招标信息管理'},
+              {path:'mybids',name:'投标信息管理'}
 
                 ]
           },
@@ -83,9 +121,9 @@
             path:'info',
             name:'信息管理',
             children:[
-              {path: 'infoShow',name:'个人信息'},
-              {path:'child_1',name:'子集一'},
-              {path:'child_2',name:'子集二'}
+
+              {path:'setadmin',name:'用户信息管理'},
+
 
             ]
           }
@@ -97,13 +135,12 @@
 
 <style scoped>
   .wrapper {
-
-    position: absolute;
     width:180px;
-    left: 8px;
     height:calc(100vh - 80px);
+   /* height: 100vh;*/
     background-color: #324057;
-    z-index: 99;
+
+
   }
   .el-menu {
     border: none;

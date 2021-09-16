@@ -66,7 +66,7 @@
     data() {
       return {
 
-
+        user:this.$store.state.user,
         form_rules: {
           drugName: [
             { required: true, message: "药品名称不能为空！", trigger: "blur" }
@@ -97,6 +97,8 @@
 
             const option = this.dialog.option
 
+            this.form_data.announcer = this.user.id;//获取信息发布者账号id
+
             if(option === 'add'){
 
               this.$axios.post('/tender/add',this.form_data).then(res =>{
@@ -115,8 +117,8 @@
               this.$emit('LoadRefresh')
             }
             else if(option === 'edit'){
-
-              this.$axios.post(`/edit/${this.form_data.id}`,this.form_data).then(res =>{
+              //修改招标信息请求
+              this.$axios.post(`/tender/edit/${this.form_data.id}`,this.form_data).then(res =>{
                 this.$message({
                   message:'修改成功',
                   type: 'success',

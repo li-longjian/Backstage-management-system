@@ -18,7 +18,9 @@ router.get('/',(req,res)=>{
 //   // header('Access-Control-Allow-Method:POST,GET');//允许访问的方式
 //   res.send({'msg':'ok_abc_post',code:200})
 // })
-
+/**
+ * 注册用户
+ */
 router.post('/register',(req, res)=>{
 
   const {name,email,password,identity} = req.body
@@ -54,6 +56,9 @@ router.post('/register',(req, res)=>{
 
 })
 
+/**
+ * 用户登录
+ */
 router.post('/login',(req, res)=>{
 
   const {email,password} = req.body
@@ -86,6 +91,47 @@ router.post('/login',(req, res)=>{
         })
       });
     });
+  })
+})
+
+/**
+ * 获取所有用户
+ */
+router.get('/user',(req,res) =>{
+  User.find().then(user =>{
+    res.json(user)
+  })
+})
+/**
+ * 注销用户
+ */
+router.get('/user/delete/:id',(req,res) =>{
+  User.deleteOne({_id: req.params.id}, err => {
+    if (err) return res.status(404).json({msg: '删除失败'})
+    else res.json({msg: '删除成功'})
+  })
+})
+/**
+ * 更新用户信息
+ */
+
+/**
+ * 修改用户
+ */
+router.post('/setuser/:id',(req,res)=>{
+
+ let userDate = {};
+
+  if (req.body.email) userDate.email = req.body.email
+  if (req.body.name) userDate.name = req.body.name
+  if (req.body.identity) userDate.identity = req.body.identity
+
+  User.updateOne({_id: req.params.id}, userDate).then(user => {
+    if (user) {
+      res.json(user)
+    }
+  }).catch(err => {
+    console.log(err);
   })
 })
 

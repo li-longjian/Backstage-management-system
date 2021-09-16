@@ -40,6 +40,9 @@ let bids_schema = new Schema({
   paymentDate:{//投标保证金缴款日期
     type:String
   },
+  announcer:{//投标信息发布者
+    type:String
+  },
   date:{
     type:Date,
     default:Date.now

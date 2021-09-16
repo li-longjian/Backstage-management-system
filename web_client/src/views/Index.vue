@@ -2,10 +2,11 @@
 <!--  首页-->
   <div class="IndexBox">
     <header-nav ></header-nav>
-    <left-menu-nav></left-menu-nav>
-    <div class="rightContent">
-      <router-view ></router-view>
-    </div>
+    <left-menu-nav class="left-menu"></left-menu-nav>
+    <router-view class="rightContent"></router-view>
+   <!-- <div class="rightContent">
+
+    </div>-->
 
 
   </div>
@@ -27,15 +28,23 @@
 </script>
 
 <style scoped>
+
 .IndexBox{
+
   width: 100vw;
   height:100vh;
 
 }
+.left-menu{
+  margin: 0;
+}
   .rightContent{
-    position: relative;
+
+    /*float: left;*/
+    position: absolute;
+    top:70px;
     width: calc(100vw - 180px);
-    height: calc(100vh - 80px);
+    height:calc(100vh - 80px);
     left:180px;
   }
 </style>

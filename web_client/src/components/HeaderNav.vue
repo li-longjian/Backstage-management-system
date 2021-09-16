@@ -80,6 +80,7 @@
     background: #324057;
     color: #fff;
     border-bottom: 1px solid #1f2d3d;
+
   }
   .logo-container {
     line-height: 60px;

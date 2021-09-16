@@ -35,4 +35,26 @@ router.post('/board/add',(req,res)=>{
 })
 
 
+/**
+ * 根据id删除留言信息
+ */
+router.get('/message/delete/:id',(req,res) => {
+  Message.deleteOne({_id: req.params.id}, err => {
+    if (err) return res.status(404).json({msg: '删除失败'})
+    else res.json({msg: '删除成功'})
+  })
+})
+/**
+ * 根据id编辑留言信息
+ *
+ */
+router.post('/message/edit/:id',(req,res) =>{
+  let messageDate = req.body
+  Message.updateOne({_id:req.params.id},messageDate).then(mess =>{
+
+      res.json(mess)
+
+
+  }).catch(err => console.log(err))
+})
 module.exports = router
